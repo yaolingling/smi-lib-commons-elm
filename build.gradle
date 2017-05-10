@@ -49,6 +49,12 @@ jar {
     }
 }
 
+javadoc {
+    options {
+         encoding = 'windows-1251'
+    }
+}
+
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
