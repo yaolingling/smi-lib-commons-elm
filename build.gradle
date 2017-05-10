@@ -106,7 +106,7 @@ artifacts {
 }
 
 signing {
-    required { isReleaseVersion }
+    required { gradle.taskGraph.hasTask("artifactoryPublish") }
     sign configurations.archives
 }
 
