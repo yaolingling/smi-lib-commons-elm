@@ -8,7 +8,6 @@ package com.dell.isg.smi.commons.elm.utilities.xml;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +29,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -43,26 +41,36 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.dell.isg.smi.commons.elm.exception.RuntimeCoreException;
+
+/**
+ * The Class XmlHelper.
+ */
 public class XmlHelper {
 
     private static XmlHelper _instance;
+    private static final Logger logger = LoggerFactory.getLogger(XmlHelper.class);
 
     static {
         try {
             _instance = new XmlHelper();
         } catch (Exception e) {
-            throw new RuntimeException("Exception occured in creating singleton instance");
+            throw new RuntimeCoreException("Exception occured in creating singleton instance", e);
         }
     }
 
 
     /**
+     * Gets the instance.
+     *
      * @return XmlHelper
      */
     public static XmlHelper GetInstance() {
@@ -71,7 +79,9 @@ public class XmlHelper {
 
 
     /**
-     * @param target
+     * Gets the xml from object.
+     *
+     * @param target the target
      * @return String that represent the object
      */
     public String GetXmlFromObject(Object target) {
@@ -84,106 +94,87 @@ public class XmlHelper {
             marshaller.marshal(target, writer);
             result = writer.toString();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("failed in GetXmlFromObject", e);
         }
 
         return result;
     }
 
 
-    /*
-     * public static Object xmlToObject(File file, Class jaxbModelClasses) throws JAXBException, FileNotFoundException, ParserConfigurationException, SAXException { JAXBContext jc
-     * = JAXBContext.newInstance(jaxbModelClasses); Unmarshaller u = jc.createUnmarshaller(); Object xmlElement = null; try { SAXSource saxSource =
-     * XmlHelper.getSAXSourceFromFile(file); xmlElement = u.unmarshal(saxSource); } catch (JAXBException e) { throw e; } return xmlElement; }
+
+    /**
+     * Xml to object.
+     *
+     * @param xmlString the xml string
+     * @param validate the validate
+     * @param cls the cls
+     * @return the object
      */
-
-    public static Object xmlToObject(File file, Class jaxbModelClasses) throws JAXBException, XMLStreamException {
-        return null;
-        /*
-         * // return object Object xmlElement = null;
-         * 
-         * // create an input factory with settings to prevent Xml External Entity Injection (XEE) XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
-         * xmlInputFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false); xmlInputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-         * 
-         * // create an unmarshaller JAXBContext jaxbContext = JAXBContext.newInstance(jaxbModelClasses); Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-         * 
-         * // read the file contents into a streamReader using the xmlInputFactory, then unmarshall it. XMLStreamReader xmlStreamReader = null; try{ xmlStreamReader =
-         * xmlInputFactory.createXMLStreamReader(new StreamSource(file)); xmlElement = unmarshaller.unmarshal(xmlStreamReader); } catch (JAXBException e){ throw e; } finally{ //
-         * close the stream if it is open if(null != xmlStreamReader){ try { xmlStreamReader.close(); } catch (XMLStreamException e){} } }
-         * 
-         * return xmlElement;
-         */
-    }
-
-
-    /*
-     * public static SAXSource getSAXSourceFromXMLString(String inputString) throws ParserConfigurationException, SAXException{ InputSource inputSource = new InputSource(new
-     * StringReader(inputString)); return getSAXSourceFromInputSource(inputSource); }
-     * 
-     * public static SAXSource getSAXSourceFromFile(File file) throws FileNotFoundException, ParserConfigurationException, SAXException{ FileInputStream fileInputStream = null;
-     * try{ fileInputStream = new FileInputStream(file); InputSource inputSource = new InputSource(); return getSAXSourceFromInputSource(inputSource); } finally{
-     * Utilities.closeStreamQuietly(fileInputStream); } }
-     * 
-     * private static SAXSource getSAXSourceFromInputSource(InputSource inputSource) throws ParserConfigurationException, SAXException{ SAXParserFactory spf =
-     * SAXParserFactory.newInstance(); spf.setNamespaceAware(true); //spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true); SAXParser sp = spf.newSAXParser(); XMLReader
-     * xmlReader = sp.getXMLReader(); xmlReader.setEntityResolver(new NullXmlEntityResolver()); SAXSource saxSource = new SAXSource(xmlReader,inputSource); return saxSource; }
-     */
-
     public static Object xmlToObject(String xmlString, boolean validate, Class cls) {
         try {
             JAXBContext jc = JAXBContext.newInstance(cls);
-
             Unmarshaller u = jc.createUnmarshaller();
-
-            Object genericXmlObject = u.unmarshal(new StreamSource(new StringReader(xmlString)));
-
-            return genericXmlObject;
+            return u.unmarshal(new StreamSource(new StringReader(xmlString)));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeCoreException(e);
         }
-
     }
 
 
+    /**
+     * Xml to object.
+     *
+     * @param node the node
+     * @param cls the cls
+     * @return the object
+     * @throws Exception the exception
+     */
     public static Object xmlToObject(Node node, Class cls) throws Exception {
-
         JAXBContext jaxbContext = JAXBContext.newInstance(cls);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
         JAXBElement root = unmarshaller.unmarshal(node, cls);
-
         return root.getValue();
-
     }
 
 
+    /**
+     * Object to complex xml type string.
+     *
+     * @param obj the obj
+     * @param rootName the root name
+     * @return the string
+     * @throws Exception the exception
+     */
     public static String objectToComplexXmlTypeString(Object obj, String rootName) throws Exception {
-
         JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
         Marshaller marshaller = jaxbContext.createMarshaller();
-
         StringWriter sw = new StringWriter();
         marshaller.marshal(new JAXBElement(new QName("", rootName), obj.getClass(), obj), sw);
-
         return sw.toString();
-
     }
 
 
+    /**
+     * Complex type XML str to object.
+     *
+     * @param cls the cls
+     * @param xml the xml
+     * @return the object
+     * @throws Exception the exception
+     */
     public static Object complexTypeXMLStrToObject(Class cls, String xml) throws Exception {
-
         JAXBContext jaxbContext = JAXBContext.newInstance(cls);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
         JAXBElement biosAttrDetails = unmarshaller.unmarshal(new StreamSource(new StringReader(xml)), cls);
-
         return biosAttrDetails.getValue();
     }
 
 
     /**
-     * @param target
-     * @param nameSpaceMap
+     * Gets the xml from object.
+     *
+     * @param target the target
+     * @param nameSpaceMap the name space map
      * @return String that represent the object
      */
     public String GetXmlFromObject(Object target, HashMap<String, String> nameSpaceMap) {
@@ -195,7 +186,7 @@ public class XmlHelper {
             Iterator<Entry<String, String>> it = nameSpaceMap.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<String, String> entry = it.next();
-                xmlStreamWriter.setPrefix(entry.getKey().toString(), entry.getValue().toString());
+                xmlStreamWriter.setPrefix(entry.getKey(), entry.getValue());
             }
 
             JAXBContext context = JAXBContext.newInstance(target.getClass());
@@ -203,8 +194,7 @@ public class XmlHelper {
             marshaller.marshal(target, xmlStreamWriter);
             result = FixNameSpace(nameSpaceMap, writer.toString());
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("failed in GetXmlFromObject", e);
         }
 
         return result;
@@ -212,32 +202,32 @@ public class XmlHelper {
 
 
     /**
-     * @param nameSpaceMap
-     * @param target
+     * Fix name space.
+     *
+     * @param nameSpaceMap the name space map
+     * @param target the target
      * @return String that represent the object
      */
     private String FixNameSpace(HashMap<String, String> nameSpaceMap, String target) {
-
         StringBuilder nameSpaceContents = new StringBuilder();
         Iterator<Entry<String, String>> it = nameSpaceMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, String> entry = it.next();
             nameSpaceContents.append("xmlns:" + entry.getKey() + "=\"" + entry.getValue() + "\" ");
         }
-
         return target.replaceAll("xmlns=\"\"", nameSpaceContents.toString());
     }
 
 
     /**
-     * @param target
-     * @param xml
+     * Gets the object from xml.
+     *
+     * @param target the target
+     * @param xml the xml
      * @return Object
      */
     public Object GetObjectFromXml(Object target, String xml) {
-
         Object xmlObject = null;
-
         try {
             ByteArrayInputStream stream = new ByteArrayInputStream(xml.getBytes());
             JAXBContext context = JAXBContext.newInstance(target.getClass());
@@ -245,94 +235,108 @@ public class XmlHelper {
             unmarshaller.setSchema(null);
             xmlObject = target.getClass().cast(unmarshaller.unmarshal(stream));
         } catch (JAXBException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("failed in GetXmlFromObject", e);
         }
-
         return xmlObject;
     }
 
 
-    // comment out this one for now since it gives compile warning.
-    // @SuppressWarnings("deprecation")
-    // public boolean IsXMLValid(String xmlFileName, String xmlSchemaFileName)
-    // throws ParserConfigurationException
-    // {
-    // boolean isValid = true;
-    // try
-    // {
-    // DocumentBuilder parser = DocumentBuilderFactory.newInstance()
-    // .newDocumentBuilder();
-    // org.w3c.dom.Document document = parser.parse(new File(xmlFileName));
-    // SchemaFactory factory = SchemaFactory
-    // .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-    // Source schemaFile = new StreamSource(new File(xmlSchemaFileName));
-    // javax.xml.validation.Schema schema = factory.newSchema(schemaFile);
-    // javax.xml.validation.Validator validator = schema.newValidator();
-    //
-    // try
-    // {
-    // validator.validate(new DOMSource(document));
-    // }
-    // catch (SAXException e)
-    // {
-    // isValid = false;
-    // }
-    // }
-    // catch (SAXException e)
-    // {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // catch (IOException e)
-    // {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    //
-    // return isValid;
-    // }
-
+    /**
+     * Convert string to XML document.
+     *
+     * @param xmlSource the xml source
+     * @return the document
+     * @throws ParserConfigurationException the parser configuration exception
+     * @throws SAXException the SAX exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static Document convertStringToXMLDocument(String xmlSource) throws ParserConfigurationException, SAXException, IOException {
         return convertStringToXMLDocument(xmlSource, false);
     }
 
 
+    /**
+     * Convert string to XML document.
+     *
+     * @param xmlSource the xml source
+     * @param namespaceAware the namespace aware
+     * @return the document
+     * @throws ParserConfigurationException the parser configuration exception
+     * @throws SAXException the SAX exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static Document convertStringToXMLDocument(String xmlSource, boolean namespaceAware) throws ParserConfigurationException, SAXException, IOException {
         InputStream inputStream = new ByteArrayInputStream(xmlSource.getBytes());
         return convertInputStreamToXmlDocument(inputStream, namespaceAware);
     }
 
 
+    /**
+     * Convert bytes to xml document.
+     *
+     * @param inputBytes the input bytes
+     * @return the document
+     * @throws ParserConfigurationException the parser configuration exception
+     * @throws SAXException the SAX exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static Document convertBytesToXmlDocument(byte[] inputBytes) throws ParserConfigurationException, SAXException, IOException {
         return convertBytesToXmlDocument(inputBytes, false);
     }
 
 
+    /**
+     * Convert bytes to xml document.
+     *
+     * @param inputBytes the input bytes
+     * @param namespaeAware the namespae aware
+     * @return the document
+     * @throws ParserConfigurationException the parser configuration exception
+     * @throws SAXException the SAX exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static Document convertBytesToXmlDocument(byte[] inputBytes, boolean namespaeAware) throws ParserConfigurationException, SAXException, IOException {
         InputStream inputStream = new ByteArrayInputStream(inputBytes);
         return convertInputStreamToXmlDocument(inputStream, namespaeAware);
     }
 
 
+    /**
+     * Convert input stream to xml document.
+     *
+     * @param inputStream the input stream
+     * @param namespaceAware the namespace aware
+     * @return the document
+     * @throws ParserConfigurationException the parser configuration exception
+     * @throws SAXException the SAX exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static Document convertInputStreamToXmlDocument(InputStream inputStream, boolean namespaceAware) throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(namespaceAware);
         factory.setFeature(javax.xml.XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        DocumentBuilder builder = null;
-        Document document;
-        builder = factory.newDocumentBuilder();
+        DocumentBuilder builder = factory.newDocumentBuilder();
         builder.setEntityResolver(new NullXmlEntityResolver());
-        document = builder.parse(inputStream);
-        return document;
+        return builder.parse(inputStream);
     }
 
 
+    /**
+     * Convert file to XML document.
+     *
+     * @param xmlSource the xml source
+     * @return the document
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws ParserConfigurationException the parser configuration exception
+     * @throws SAXException the SAX exception
+     */
     public static Document convertFileToXMLDocument(String xmlSource) throws IOException, ParserConfigurationException, SAXException {
         StringBuilder stringBuilder = new StringBuilder();
+        FileReader fileReader = null;
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new FileReader(xmlSource));
+            fileReader = new FileReader(xmlSource);
+            br = new BufferedReader(fileReader);
             String strLine = null;
             // Read File Line By Line
             while ((strLine = br.readLine()) != null) {
@@ -341,6 +345,10 @@ public class XmlHelper {
             return convertStringToXMLDocument(stringBuilder.toString());
 
         } finally {
+            if (fileReader != null) {
+                fileReader.close();
+            }
+            
             if (br != null) {
                 br.close();
             }
@@ -348,15 +356,31 @@ public class XmlHelper {
     }
 
 
+    /**
+     * Find object in document.
+     *
+     * @param doc the doc
+     * @param xPathLocation the x path location
+     * @param qname the qname
+     * @return the object
+     * @throws XPathExpressionException the x path expression exception
+     */
     public static Object findObjectInDocument(Document doc, String xPathLocation, QName qname) throws XPathExpressionException {
         XPathFactory factory = XPathFactory.newInstance();
         XPath xpath = factory.newXPath();
         XPathExpression expr = xpath.compile(xPathLocation);
-        Object result = expr.evaluate(doc, qname);
-        return result;
+        return expr.evaluate(doc, qname);
     }
 
 
+    /**
+     * Find object in document.
+     *
+     * @param doc the doc
+     * @param nodeName the node name
+     * @return the object
+     * @throws XPathExpressionException the x path expression exception
+     */
     public static Object findObjectInDocument(Document doc, String nodeName) throws XPathExpressionException {
         Object result = "";
         Element element = doc.getDocumentElement();
@@ -371,9 +395,7 @@ public class XmlHelper {
                 } else {
                     result = nodeList.item(0).getNodeValue();
                 }
-                System.out.println();
             }
-
         }
         return result;
     }
@@ -383,15 +405,23 @@ public class XmlHelper {
      * utility function to convert XML doc into Java String
      */
 
+    /**
+     * Convert document to string.
+     *
+     * @param document the document
+     * @return the string
+     * @throws ParserConfigurationException the parser configuration exception
+     * @throws TransformerException the transformer exception
+     * @throws SAXException the SAX exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static String convertDocumenttoString(Document document) throws ParserConfigurationException, TransformerException, SAXException, IOException {
-
         DOMSource domSource = new DOMSource(document);
         StringWriter writer = new StringWriter();
         StreamResult result = new StreamResult(writer);
         TransformerFactory tf = TransformerFactory.newInstance();
         tf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        Transformer transformer = null;
-        transformer = tf.newTransformer();
+        Transformer transformer = tf.newTransformer();
         transformer.transform(domSource, result);
         return writer.toString();
     }

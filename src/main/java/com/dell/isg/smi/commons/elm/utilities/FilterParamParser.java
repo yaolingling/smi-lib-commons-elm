@@ -184,6 +184,7 @@ public class FilterParamParser {
          * Construct the Object. The input parameter will contain the name of the column as well as information about the filter operator.
          *
          * @param columnName the column to filter. columnValue the column value.
+         * @param columnValue the column value
          */
         public FilterInfo(String columnName, String columnValue) {
             this.columnName = columnName;

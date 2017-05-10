@@ -5,15 +5,17 @@ package com.dell.isg.smi.commons.elm.messaging;
 
 import java.util.Locale;
 
-//import com.dell.esg.icee.common.logging.FriendlyMessageBundleReader;
-
+/**
+ * A factory for creating MessageReader objects.
+ */
 public class MessageReaderFactory {
+    
     /**
      * Creates reader with the given locale.
      *
-     * @param type - Reader type.
+     * @param msgCode the msg code
      * @param locale - Locale to in initialize the reader with.
-     * @return
+     * @return the i message reader
      */
     public static IMessageReader createReader(String msgCode, Locale locale) {
         MessageReaderType type = getReaderType(msgCode);
@@ -41,6 +43,12 @@ public class MessageReaderFactory {
     // }
     // }
 
+    /**
+     * Gets the reader type.
+     *
+     * @param msgCode the msg code
+     * @return the reader type
+     */
     private static MessageReaderType getReaderType(String msgCode) {
         return MessageReaderType.FriendlyLogBundleReader;
     }

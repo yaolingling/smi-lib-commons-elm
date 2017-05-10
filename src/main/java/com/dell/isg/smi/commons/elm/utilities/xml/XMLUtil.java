@@ -33,15 +33,21 @@ import org.xml.sax.helpers.XMLFilterImpl;
 
 import com.dell.isg.smi.commons.elm.exception.RuntimeCoreException;
 
+/**
+ * The Class XMLUtil.
+ */
 public class XMLUtil {
 
+    private XMLUtil(){ 
+    }
+    
     /**
-     * Parses an xml from the filesystem using JAXB
-     * 
-     * @param xmlPath
-     * @param jaxbModelClasses
-     * @return
-     * @throws JAXBException
+     * Parses an xml from the filesystem using JAXB.
+     *
+     * @param xmlPath the xml path
+     * @param jaxbModelClasses the jaxb model classes
+     * @return the object
+     * @throws JAXBException the JAXB exception
      */
     public static Object parseXML(String xmlPath, Class[] jaxbModelClasses) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(jaxbModelClasses);
@@ -59,12 +65,12 @@ public class XMLUtil {
     /**
      * Parses an xml from the filesystem using JAXB and ignores specified namespace. This is requred when we are parsing an xml file which does not specify namespace and the same
      * needs to be unmarshalled
-     * 
-     * @param xmlPath
-     * @param namespace
-     * @param jaxbModelClasses
-     * @return
-     * @throws Exception
+     *
+     * @param xmlPath the xml path
+     * @param namespace the namespace
+     * @param jaxbModelClasses the jaxb model classes
+     * @return the object
+     * @throws Exception the exception
      */
     public static Object parseXMLIgnoreNamespace(String xmlPath, String namespace, Class[] jaxbModelClasses) throws Exception {
         JAXBContext jc = JAXBContext.newInstance(jaxbModelClasses);
@@ -84,12 +90,13 @@ public class XMLUtil {
 
 
     /**
-     * 
-     * @param xmlData
-     * @param jaxbModelClasses
-     * @return
-     * @throws JAXBException
-     * @throws ConfigurationNotFoundException
+     * Parses the XML from stream.
+     *
+     * @param xmlData the xml data
+     * @param jaxbModelClasses the jaxb model classes
+     * @return the object
+     * @throws JAXBException the JAXB exception
+     * @throws RuntimeCoreException the runtime core exception
      */
     public static Object parseXMLFromStream(InputStream xmlData, Class[] jaxbModelClasses) throws JAXBException, RuntimeCoreException {
         JAXBContext jc = JAXBContext.newInstance(jaxbModelClasses);
@@ -105,12 +112,12 @@ public class XMLUtil {
 
 
     /**
-     * Saves the xml using jaxb implementation
-     * 
-     * @param xmlPath
-     * @param jaxbModelClasses
-     * @param element
-     * @throws JAXBException
+     * Saves the xml using jaxb implementation.
+     *
+     * @param xmlPath the xml path
+     * @param jaxbModelClasses the jaxb model classes
+     * @param element the element
+     * @throws JAXBException the JAXB exception
      */
     public static void saveXML(String xmlPath, Class[] jaxbModelClasses, Object element) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(jaxbModelClasses);
@@ -121,9 +128,10 @@ public class XMLUtil {
 
 
     /**
-     * 
-     * @param schemaFile
-     * @param buf
+     * Validate.
+     *
+     * @param schemaFile the schema file
+     * @param buf the buf
      */
     public static void validate(InputStream schemaFile, byte[] buf) {
         Source xmlFile = new StreamSource(new ByteArrayInputStream(buf));
@@ -140,10 +148,11 @@ public class XMLUtil {
 
 
     /**
-     * 
-     * @param object
-     * @param jaxbClasses
-     * @return
+     * Gets the xml.
+     *
+     * @param object the object
+     * @param jaxbClasses the jaxb classes
+     * @return the xml
      */
     public static byte[] getXML(Object object, Class[] jaxbClasses) {
         try {
@@ -154,23 +163,32 @@ public class XMLUtil {
             m.marshal(object, sbos);
             return sbos.toByteArray();
         } catch (Exception e) {
-            throw new RuntimeCoreException("Unable to create XML String");
+            throw new RuntimeCoreException("Unable to create XML String", e);
         }
     }
 
     /**
-     * XMLNamespaceFilter
+     * XMLNamespaceFilter.
      */
     public static class XMLNamespaceFilter extends XMLFilterImpl {
         private String namespace;
 
 
+        /**
+         * Instantiates a new XML namespace filter.
+         *
+         * @param arg0 the arg 0
+         * @param namespace the namespace
+         */
         public XMLNamespaceFilter(XMLReader arg0, String namespace) {
             super(arg0);
             this.namespace = namespace;
         }
 
 
+        /* (non-Javadoc)
+         * @see org.xml.sax.helpers.XMLFilterImpl#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+         */
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             super.startElement(this.namespace, localName, qName, attributes);
@@ -178,11 +196,20 @@ public class XMLUtil {
     }
 
 
+    /**
+     * Convert file to XML string.
+     *
+     * @param xmlSource the xml source
+     * @return the string
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static String convertFileToXMLString(String xmlSource) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
+        FileReader fileReader = null;
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new FileReader(xmlSource));
+            fileReader = new FileReader(xmlSource);
+            br = new BufferedReader(fileReader);
             String strLine = null;
             // Read File Line By Line
             while ((strLine = br.readLine()) != null) {
@@ -190,6 +217,10 @@ public class XMLUtil {
             }
             return stringBuilder.toString();
         } finally {
+            if (fileReader != null) {
+                fileReader.close();
+            }
+            
             if (br != null) {
                 br.close();
             }

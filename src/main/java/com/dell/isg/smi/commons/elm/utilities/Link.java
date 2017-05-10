@@ -381,7 +381,9 @@ public class Link {
 
 
     /**
-     * Note that relations in Link is not an array. Concatenate with space delimiter. No comma is allowed. Eg> NEXT FIRST
+     * Note that relations in Link is not an array. Concatenate with space delimiter. No comma is allowed. Eg NEXT FIRST
+     *
+     * @param rel the new rel
      */
     public void setRel(String rel) {
         this.rel = rel;

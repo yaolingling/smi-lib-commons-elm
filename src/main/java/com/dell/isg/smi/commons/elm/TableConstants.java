@@ -3,6 +3,9 @@
  */
 package com.dell.isg.smi.commons.elm;
 
+/**
+ * The Interface TableConstants.
+ */
 public interface TableConstants {
 
     String C_ID = "id";

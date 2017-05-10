@@ -5,9 +5,8 @@ package com.dell.isg.smi.commons.elm.utilities;
 
 import java.util.List;
 
-//import com.dell.esg.icee.common.exception.RuntimeCoreException;
-//import com.dell.smi.api.virtualidentity.model.EnumErrorCode;
-
+import com.dell.isg.smi.commons.elm.exception.RuntimeCoreException;
+import com.dell.isg.smi.commons.elm.model.EnumErrorCode;
 import com.dell.isg.smi.commons.elm.model.PagedResult;
 import com.dell.isg.smi.commons.elm.model.Pages;
 import com.dell.isg.smi.commons.elm.model.Pagination;
@@ -39,6 +38,11 @@ public final class PaginationUtils {
     }
 
 
+    /**
+     * Check total.
+     *
+     * @param total the total
+     */
     public static final void checkTotal(final long total) {
         if (total < 0) {
             throw new IllegalArgumentException("total");
@@ -46,6 +50,11 @@ public final class PaginationUtils {
     }
 
 
+    /**
+     * Check offset.
+     *
+     * @param offset the offset
+     */
     public static final void checkOffset(final long offset) {
         if (offset < 0) {
             throw new IllegalArgumentException("offset");
@@ -53,6 +62,11 @@ public final class PaginationUtils {
     }
 
 
+    /**
+     * Check limit.
+     *
+     * @param limit the limit
+     */
     public static final void checkLimit(final long limit) {
         if (limit <= 0) {
             throw new IllegalArgumentException("limit");
@@ -69,10 +83,10 @@ public final class PaginationUtils {
 
         final Pages pages = new Pages();
 
-        long currentPage = 0;
-        long nextPage = 0;
-        long prevPage = 0;
-        long totalPage = 0;
+        long currentPage;
+        long nextPage;
+        long prevPage;
+        long totalPage;
 
         totalPage = total / limit;
         if (total % limit != 0) {
@@ -154,45 +168,18 @@ public final class PaginationUtils {
     }
 
 
-    public static final <T> PagedResult<T> paginate2(final List<T> data, final long total, final long offset, final long limit) {
-
-        // ZERO pages
-        if (total == 0) {
-            return ZERO_RESULT;
-        }
-
-        checkData(data);
-        checkTotal(total);
-        checkOffset(offset);
-        checkLimit(limit);
-
-        final PagedResult<T> pagedResult = new PagedResult<T>();
-        pagedResult.getData().addAll(data);
-
-        final Pagination pagination = getPagination(total, offset, limit);
-        pagedResult.setPagination(pagination);
-
-        final Pages pages = getPages(total, offset, limit);
-        pagedResult.setPages(pages);
-
-        return pagedResult;
-    }
-
-
     public static void checkBoundaries(long offset, long limit, long total) {
 
         if (limit > total) {
-            // RuntimeCoreException rce = new RuntimeCoreException(EnumErrorCode.ENUM_INPUT_EXCEEDED_TOTAL);
-            // rce.addAttribute("limit");
-            // throw rce;
-            throw new RuntimeException("Limit exceeded total.");
+             RuntimeCoreException rce = new RuntimeCoreException(EnumErrorCode.ENUM_INPUT_EXCEEDED_TOTAL);
+             rce.addAttribute("limit");
+             throw rce;
         }
 
         if (offset > total) {
-            // RuntimeCoreException rce = new RuntimeCoreException(EnumErrorCode.ENUM_INPUT_EXCEEDED_TOTAL);
-            // rce.addAttribute("offset");
-            // throw rce;
-            throw new RuntimeException("offset exceeded total.");
+            RuntimeCoreException rce = new RuntimeCoreException(EnumErrorCode.ENUM_INPUT_EXCEEDED_TOTAL);
+            rce.addAttribute("offset");
+            throw rce;
         }
 
     }

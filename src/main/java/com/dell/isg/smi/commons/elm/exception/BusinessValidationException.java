@@ -15,26 +15,50 @@ import com.dell.isg.smi.commons.elm.messaging.IMessageEnum;
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class BusinessValidationException extends RuntimeCoreException {
 
+    /**
+     * Instantiates a new business validation exception.
+     */
     public BusinessValidationException() {
         super();
     }
 
 
+    /**
+     * Instantiates a new business validation exception.
+     *
+     * @param enumErrorCode the enum error code
+     */
     public BusinessValidationException(IMessageEnum enumErrorCode) {
         super(enumErrorCode);
     }
 
 
+    /**
+     * Instantiates a new business validation exception.
+     *
+     * @param e the e
+     */
     public BusinessValidationException(Throwable e) {
         super(e);
     }
 
 
+    /**
+     * Instantiates a new business validation exception.
+     *
+     * @param msg the msg
+     */
     public BusinessValidationException(String msg) {
         super(msg);
     }
 
 
+    /**
+     * Instantiates a new business validation exception.
+     *
+     * @param msg the msg
+     * @param e the e
+     */
     public BusinessValidationException(String msg, Throwable e) {
         super(msg, e);
     }
@@ -45,11 +69,11 @@ public class BusinessValidationException extends RuntimeCoreException {
     /**
      * Handles BusinessValidationException - added multiple values as ONE Attribute
      *
-     * @param enumCode
-     * @param valueNames
-     * @throws BusinessValidationException
+     * @param enumCode   The enumerated error code
+     * @param valueNames The values to append
+     * @throws BusinessValidationException  A business validation exception
      */
-    public static void handleBusinessValidationException(IMessageEnum enumCode, String... valueNames) throws BusinessValidationException {
+    public static void handleBusinessValidationException(IMessageEnum enumCode, String... valueNames) {
         BusinessValidationException exception = new BusinessValidationException();
         StringBuilder valArgs = new StringBuilder();
         exception.setErrorCode(enumCode);

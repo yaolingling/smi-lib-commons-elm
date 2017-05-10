@@ -20,7 +20,7 @@ import javax.persistence.Table;
 import com.dell.isg.smi.commons.elm.TableConstants;
 
 /**
- *
+ * The Class MessageEntity.
  */
 @Entity
 @Table(name = TableConstants.T_LOCALIZED_MESSAGES)

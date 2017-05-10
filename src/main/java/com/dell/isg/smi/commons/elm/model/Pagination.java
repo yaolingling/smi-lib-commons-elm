@@ -15,27 +15,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * <p>
- * Java class for Pagination complex type.
- *
- * <p>
- * The following schema fragment specifies the expected content contained within this class.
- *
- * <pre>
- * &lt;complexType name="Pagination">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="offset" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="limit" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="total" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- *
- *
+ * The Class Pagination.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Pagination", propOrder = { "offset", "limit", "total" })
@@ -49,6 +29,7 @@ public class Pagination {
     /**
      * Gets the value of the offset property.
      *
+     * @return the offset
      */
     public long getOffset() {
         return offset;
@@ -58,6 +39,7 @@ public class Pagination {
     /**
      * Sets the value of the offset property.
      *
+     * @param value the new offset
      */
     public void setOffset(long value) {
         this.offset = value;
@@ -67,6 +49,7 @@ public class Pagination {
     /**
      * Gets the value of the limit property.
      *
+     * @return the limit
      */
     public long getLimit() {
         return limit;
@@ -76,6 +59,7 @@ public class Pagination {
     /**
      * Sets the value of the limit property.
      *
+     * @param value the new limit
      */
     public void setLimit(long value) {
         this.limit = value;
@@ -85,6 +69,7 @@ public class Pagination {
     /**
      * Gets the value of the total property.
      *
+     * @return the total
      */
     public long getTotal() {
         return total;
@@ -94,6 +79,7 @@ public class Pagination {
     /**
      * Sets the value of the total property.
      *
+     * @param value the new total
      */
     public void setTotal(long value) {
         this.total = value;

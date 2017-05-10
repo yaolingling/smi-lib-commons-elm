@@ -3,6 +3,9 @@
  */
 package com.dell.isg.smi.commons.elm;
 
+/**
+ * The Interface CommonConstants.
+ */
 public interface CommonConstants {
 
     String DEFAULT_CLIENT_LOCALE = "en_US";

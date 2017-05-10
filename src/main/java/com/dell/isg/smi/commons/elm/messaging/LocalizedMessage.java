@@ -16,18 +16,19 @@ import com.dell.isg.smi.commons.elm.model.MessagePartEnum;
 import com.dell.isg.smi.commons.elm.utilities.DateTimeUtils;
 
 /**
- *
+ * The Class LocalizedMessage.
  */
 public class LocalizedMessage implements Serializable {
     private static final long serialVersionUID = 1L;
-    private List<MessageEntity> messageEntityList = new ArrayList<MessageEntity>();
+    private List<MessageEntity> messageEntityList = new ArrayList<>();
     private String messageGroup = null;
-
-    private final String delimiter = "||";
-    private final String escapedDelimiter = "\\|\\|";
+    private final static String delimiter = "||";
+    private final static String escapedDelimiter = "\\|\\|";
 
 
     /**
+     * Gets the message entity list.
+     *
      * @return the localizedMessagesEntityList
      */
     public List<MessageEntity> getMessageEntityList() {
@@ -36,7 +37,9 @@ public class LocalizedMessage implements Serializable {
 
 
     /**
-     * @param localizedMessagesEntityList the localizedMessagesEntityList to set
+     * Sets the localized messages.
+     *
+     * @param messageEntityList the new localized messages
      */
     public void setLocalizedMessages(List<MessageEntity> messageEntityList) {
         this.messageEntityList = messageEntityList;
@@ -44,6 +47,8 @@ public class LocalizedMessage implements Serializable {
 
 
     /**
+     * Gets the message group.
+     *
      * @return the messageGroup
      */
     public String getMessageGroup() {
@@ -52,6 +57,8 @@ public class LocalizedMessage implements Serializable {
 
 
     /**
+     * Sets the message group.
+     *
      * @param messageGroup the messageGroup to set
      */
     public void setMessageGroup(String messageGroup) {
@@ -63,14 +70,14 @@ public class LocalizedMessage implements Serializable {
      * This default constructor doesn't create any Localized Message.
      */
     public LocalizedMessage() {
-
+        // just used to new up an empty object
     }
 
 
     /**
      * This constructor creates a Localized Message with message parameters.
      *
-     * @param messageCode
+     * @param messageEnum the message enum
      */
     public LocalizedMessage(IMessageEnum messageEnum) {
         this.createMessage(messageEnum, MessagePartEnum._MSG);
@@ -78,9 +85,10 @@ public class LocalizedMessage implements Serializable {
 
 
     /**
-     * This constructor creates a Localized Message with provided MessagePartEnum
+     * This constructor creates a Localized Message with provided MessagePartEnum.
      *
-     * @param messageCode
+     * @param messageEnum the message enum
+     * @param messagePart the message part
      */
     public LocalizedMessage(IMessageEnum messageEnum, MessagePartEnum messagePart) {
         this.createMessage(messageEnum, messagePart);
@@ -90,7 +98,8 @@ public class LocalizedMessage implements Serializable {
     /**
      * This constructor creates a Localized Message with provided message parameters.
      *
-     * @param messageCode
+     * @param messageEnum the message enum
+     * @param params the params
      */
     public LocalizedMessage(IMessageEnum messageEnum, String... params) {
         this.createMessage(messageEnum, MessagePartEnum._MSG, params);
@@ -100,7 +109,9 @@ public class LocalizedMessage implements Serializable {
     /**
      * This constructor creates a Localized Message with provided message parameters.
      *
-     * @param messageCode
+     * @param messageEnum the message enum
+     * @param messagePart the message part
+     * @param params the params
      */
     public LocalizedMessage(IMessageEnum messageEnum, MessagePartEnum messagePart, String... params) {
         this.createMessage(messageEnum, messagePart, params);
@@ -110,6 +121,7 @@ public class LocalizedMessage implements Serializable {
     /**
      * Gets the locale off of request's ThreadLocal using the locale helper and calls getLocalizedMessageString.
      *
+     * @return the string
      */
     @Override
     public String toString() {
@@ -121,7 +133,7 @@ public class LocalizedMessage implements Serializable {
     /**
      * This method appends the provided LocalizedMessage object into the parent object.
      *
-     * @param localizedMessage
+     * @param localizedMessage the localized message
      */
     public void appendLocalizedMessage(LocalizedMessage localizedMessage) {
         if (localizedMessage != null) {
@@ -131,7 +143,7 @@ public class LocalizedMessage implements Serializable {
                     this.messageEntityList = localizedMessage.messageEntityList;
                 } else {
                     if (this.messageEntityList == null || this.messageEntityList.isEmpty()) {
-                        this.messageEntityList = new ArrayList<MessageEntity>();
+                        this.messageEntityList = new ArrayList<>();
                         for (MessageEntity messageDAOEntity : localizedMessage.messageEntityList) {
                             messageDAOEntity.setMessageGroup(this.getMessageGroup());
                             this.messageEntityList.add(messageDAOEntity);
@@ -148,7 +160,7 @@ public class LocalizedMessage implements Serializable {
     /**
      * This method prepends the provided LocalizedMessage object into the parent object.
      *
-     * @param localizedMessage
+     * @param localizedMessage the localized message
      */
     public void prependLocalizedMessage(LocalizedMessage localizedMessage) {
         if (localizedMessage != null) {
@@ -158,7 +170,7 @@ public class LocalizedMessage implements Serializable {
                     this.messageEntityList = localizedMessage.messageEntityList;
                 } else {
                     if (this.messageEntityList == null || this.messageEntityList.isEmpty()) {
-                        this.messageEntityList = new ArrayList<MessageEntity>();
+                        this.messageEntityList = new ArrayList<>();
                         for (MessageEntity messageDAOEntity : localizedMessage.messageEntityList) {
                             messageDAOEntity.setMessageGroup(this.getMessageGroup());
                             this.messageEntityList.add(messageDAOEntity);
@@ -175,9 +187,9 @@ public class LocalizedMessage implements Serializable {
     /**
      * This method appends a message and allocates the stack depth.
      *
-     * @param log_level
-     * @param msgCode
-     * @param params
+     * @param messageEnum the message enum
+     * @param messagePartEnum the message part enum
+     * @param params the params
      */
     public void appendLocalizedMessage(IMessageEnum messageEnum, MessagePartEnum messagePartEnum, String... params) {
         MessageEntity lm = this.getLocalizedMessageEntityWithoutStackDepth(messageEnum, messagePartEnum, params);
@@ -189,9 +201,9 @@ public class LocalizedMessage implements Serializable {
     /**
      * This method prepends a message and allocates the stack depth.
      *
-     * @param log_level
-     * @param msgCode
-     * @param params
+     * @param messageEnum the message enum
+     * @param messagePartEnum the message part enum
+     * @param params the params
      */
     public void prependLocalizedMessage(IMessageEnum messageEnum, MessagePartEnum messagePartEnum, String... params) {
         MessageEntity lm = this.getLocalizedMessageEntityWithoutStackDepth(messageEnum, messagePartEnum, params);
@@ -203,9 +215,8 @@ public class LocalizedMessage implements Serializable {
     /**
      * This method returns the localized message string according to the locale and message group ID.
      *
-     * @param locale
-     * @param messageGroup
-     * @return
+     * @param locale the locale
+     * @return the localized message string
      */
     public String getLocalizedMessageString(Locale locale) {
         String localizedMessage = "";
@@ -234,9 +245,8 @@ public class LocalizedMessage implements Serializable {
     /**
      * This method returns the localized message string according to the locale and message group ID.
      *
-     * @param locale
-     * @param messageGroup
-     * @return
+     * @param locale the locale
+     * @return the localized message string with date
      */
     public String getLocalizedMessageStringWithDate(Locale locale) {
         String localizedMessage = "";
@@ -269,8 +279,8 @@ public class LocalizedMessage implements Serializable {
     /**
      * This method returns the formatted date string.
      *
-     * @param date
-     * @return
+     * @param date the date
+     * @return the formatted date
      */
     private String getFormattedDate(Date date) {
         return "|" + DateTimeUtils.getUtcDate(date) + "|";
@@ -280,8 +290,8 @@ public class LocalizedMessage implements Serializable {
     /**
      * This method sorts the provided list of localized messages according to the group order.
      *
-     * @param messageEntityList
-     * @return
+     * @param messageEntityList the message entity list
+     * @return the message entity[]
      */
     private MessageEntity[] sortLocalizedMessages(List<MessageEntity> messageEntityList) {
         MessageEntity[] lcList = null;
@@ -303,40 +313,44 @@ public class LocalizedMessage implements Serializable {
 
 
     /**
-     * This method assigns the new group orders to the child group according to the parent group and merge into parent
+     * This method assigns the new group orders to the child group according to the parent group and merge into parent.
      *
-     * @param localizedMessages
-     * @param maxGroupOrder
+     * @param localizedMessages the localized messages
+     * @param maxGroupOrder the max group order
      */
     private void assignMaxGroupOrdersAndMerge(List<MessageEntity> localizedMessages, int maxGroupOrder) {
         if (localizedMessages != null && !localizedMessages.isEmpty()) {
+            int groupOrder = maxGroupOrder;
             MessageEntity[] arr = this.sortLocalizedMessages(localizedMessages);
-
-            for (int i = 0; i < arr.length; i++) {
-                arr[i].setGroupOrder(maxGroupOrder);
-                arr[i].setMessageGroup(this.getMessageGroup());
-                this.messageEntityList.add(arr[i]);
-                maxGroupOrder++;
+            if(null != arr){
+                for (int i = 0; i < arr.length; i++) {
+                    arr[i].setGroupOrder(groupOrder);
+                    arr[i].setMessageGroup(this.getMessageGroup());
+                    this.messageEntityList.add(arr[i]);
+                    groupOrder++;
+                }
             }
         }
     }
 
 
     /**
-     * This method assigns the new group orders to the child group according to the parent group and merge into parent
+     * This method assigns the new group orders to the child group according to the parent group and merge into parent.
      *
-     * @param localizedMessages
-     * @param minGroupOrder
+     * @param localizedMessages the localized messages
+     * @param minGroupOrder the min group order
      */
     private void assignMinGroupOrdersAndMerge(List<MessageEntity> localizedMessages, int minGroupOrder) {
         if (localizedMessages != null && !localizedMessages.isEmpty()) {
+            int groupOrder = minGroupOrder;
             MessageEntity[] arr = this.sortLocalizedMessages(localizedMessages);
-
-            for (int i = arr.length - 1; i >= 0; i--) {
-                arr[i].setGroupOrder(minGroupOrder);
-                arr[i].setMessageGroup(this.getMessageGroup());
-                this.messageEntityList.add(arr[i]);
-                minGroupOrder--;
+            if(null != arr){
+                for (int i = arr.length - 1; i >= 0; i--) {
+                    arr[i].setGroupOrder(groupOrder);
+                    arr[i].setMessageGroup(this.getMessageGroup());
+                    this.messageEntityList.add(arr[i]);
+                    groupOrder--;
+                }
             }
         }
     }
@@ -345,8 +359,9 @@ public class LocalizedMessage implements Serializable {
     /**
      * This method creates the localized message entity and assigns the stack depth automatically. This method is for the records which doesn't have any GUID present in DB.
      *
-     * @param msgCode
-     * @param params
+     * @param messageEnum the message enum
+     * @param messagePartEnum the message part enum
+     * @param params the params
      * @return message GUID
      */
     private void createMessage(IMessageEnum messageEnum, MessagePartEnum messagePartEnum, String... params) {
@@ -363,9 +378,10 @@ public class LocalizedMessage implements Serializable {
     /**
      * This method builds the localized message object without stack depth.
      *
-     * @param msgCode
-     * @param params
-     * @return
+     * @param messageEnum the message enum
+     * @param messagePartEnum the message part enum
+     * @param params the params
+     * @return the localized message entity without stack depth
      */
     private MessageEntity getLocalizedMessageEntityWithoutStackDepth(IMessageEnum messageEnum, MessagePartEnum messagePartEnum, String... params) {
         String messageParams = "";
@@ -373,7 +389,7 @@ public class LocalizedMessage implements Serializable {
             StringBuilder builder = new StringBuilder(messageParams);
             for (int i = 0; i < params.length; i++) {
                 if (params[i] != null && !params[i].trim().isEmpty()) {
-                    builder.append(params[i].trim()).append(this.delimiter);
+                    builder.append(params[i].trim()).append(delimiter);
                 }
             }
             if (builder.length() >= 2) {
@@ -388,9 +404,10 @@ public class LocalizedMessage implements Serializable {
     /**
      * This method creates the messageEntity with provided parameters.
      *
-     * @param msgCode
-     * @param messageParams
-     * @return
+     * @param messageEnum the message enum
+     * @param messagePartEnum the message part enum
+     * @param messageParams the message params
+     * @return the message entity
      */
     private MessageEntity createMessageEntity(IMessageEnum messageEnum, MessagePartEnum messagePartEnum, String messageParams) {
         MessageEntity lm = new MessageEntity();
@@ -406,62 +423,58 @@ public class LocalizedMessage implements Serializable {
     /**
      * This method returns the stack depth for the append message.
      *
-     * @param existing_messages
-     * @return
+     * @param existingMessage the existing messages
+     * @return the int
      */
-    private int findMaxStackDepth(List<MessageEntity> existing_messages) {
-        int stack_depth = 1;
-        if (existing_messages != null && !existing_messages.isEmpty()) {
-            for (MessageEntity lm : existing_messages) {
-                if (lm.getGroupOrder() > stack_depth) {
-                    stack_depth = lm.getGroupOrder();
+    private int findMaxStackDepth(List<MessageEntity> existingMessage) {
+        int stackDepth = 1;
+        if (existingMessage != null && !existingMessage.isEmpty()) {
+            for (MessageEntity lm : existingMessage) {
+                if (lm.getGroupOrder() > stackDepth) {
+                    stackDepth = lm.getGroupOrder();
                 }
             }
-
-            stack_depth += 1;
+            stackDepth += 1;
         }
-
-        return stack_depth;
+        return stackDepth;
     }
 
 
     /**
      * This method returns the stack depth for the prepend message.
      *
-     * @param existing_messages
-     * @return
+     * @param existingMessage the existing messages
+     * @return the int
      */
-    private int findMinStackDepth(List<MessageEntity> existing_messages) {
-        int stack_depth = 1;
-        if (existing_messages != null && !existing_messages.isEmpty()) {
-            for (MessageEntity lm : existing_messages) {
-                if (stack_depth > lm.getGroupOrder()) {
-                    stack_depth = lm.getGroupOrder();
+    private int findMinStackDepth(List<MessageEntity> existingMessage) {
+        int stackDepth = 1;
+        if (existingMessage != null && !existingMessage.isEmpty()) {
+            for (MessageEntity lm : existingMessage) {
+                if (stackDepth > lm.getGroupOrder()) {
+                    stackDepth = lm.getGroupOrder();
                 }
             }
-
-            stack_depth -= 1;
+            stackDepth -= 1;
         }
-
-        return stack_depth;
+        return stackDepth;
     }
 
 
     /**
      * This method generates the localized message from the message code and message parameters.
      *
-     * @param reader
-     * @param locale
-     * @param messageCode
-     * @param params
-     * @return
+     * @param reader the reader
+     * @param locale the locale
+     * @param messageCode the message code
+     * @param params the params
+     * @return the message
      */
     private String getMessage(IMessageReader reader, Locale locale, String messageCode, String params) {
         try {
             if (params == null || params.trim().isEmpty()) {
                 return reader.getMessage(messageCode);
             } else {
-                String[] paramList = params.split(this.escapedDelimiter);
+                String[] paramList = params.split(escapedDelimiter);
                 return reader.getMessage(messageCode, paramList);
             }
         } catch (Exception e) {

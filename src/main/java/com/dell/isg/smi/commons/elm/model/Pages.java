@@ -15,28 +15,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * <p>
- * Java class for Pages complex type.
- *
- * <p>
- * The following schema fragment specifies the expected content contained within this class.
- *
- * <pre>
- * &lt;complexType name="Pages">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="current" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="previous" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="next" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="total" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- *
- *
+ * The Class Pages.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Pages", propOrder = { "current", "previous", "next", "total" })
@@ -51,6 +30,7 @@ public class Pages {
     /**
      * Gets the value of the current property.
      *
+     * @return the current
      */
     public long getCurrent() {
         return current;
@@ -60,6 +40,7 @@ public class Pages {
     /**
      * Sets the value of the current property.
      *
+     * @param value the new current
      */
     public void setCurrent(long value) {
         this.current = value;
@@ -69,6 +50,7 @@ public class Pages {
     /**
      * Gets the value of the previous property.
      *
+     * @return the previous
      */
     public long getPrevious() {
         return previous;
@@ -78,6 +60,7 @@ public class Pages {
     /**
      * Sets the value of the previous property.
      *
+     * @param value the new previous
      */
     public void setPrevious(long value) {
         this.previous = value;
@@ -87,6 +70,7 @@ public class Pages {
     /**
      * Gets the value of the next property.
      *
+     * @return the next
      */
     public long getNext() {
         return next;
@@ -96,6 +80,7 @@ public class Pages {
     /**
      * Sets the value of the next property.
      *
+     * @param value the new next
      */
     public void setNext(long value) {
         this.next = value;
@@ -105,6 +90,7 @@ public class Pages {
     /**
      * Gets the value of the total property.
      *
+     * @return the total
      */
     public long getTotal() {
         return total;
@@ -114,6 +100,7 @@ public class Pages {
     /**
      * Sets the value of the total property.
      *
+     * @param value the new total
      */
     public void setTotal(long value) {
         this.total = value;
