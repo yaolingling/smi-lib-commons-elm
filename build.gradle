@@ -98,6 +98,51 @@ uploadArchives {
        flatDir {
            dirs 'repos'
        }
+	   
+	   mavenDeployer
+	   {
+			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+			
+			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+	  
+	        pom.project {
+				artifactId = "commons-elm"
+				packaging 'jar'
+				url 'https://www.github.com/rackhd/smi-lib-commons'
+				inceptionYear '2017'
+				
+				licenses {
+					license {
+						name 'The Apache Software License, Version 2.0'
+						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+						distribution 'repo'
+					}
+				}
+				
+				scm {
+				  connection 'scm:git:git://www.github.com/rackhd/smi-lib-commons-elm.git'
+				  developerConnection 'scm:git:ssh://www.github.com/rackhd/smi-lib-commons-elm.git'
+				  url 'http://www.github.com/rackhd/smi-lib-commons-elm'
+				}
+				
+				developers {
+					developer {
+						id 'michaelsteven'
+						name 'Michael Hepfer'
+						email 'michael.hepfer@dell.com'
+						organization 'Dell EMC Inc.'
+						organizationUrl 'http://codedellemc.com'
+						}
+				}
+				
+			}
+		}
     }
 }
 
@@ -145,23 +190,5 @@ artifactory {
             repoKey = 'libs-release'
             maven = true
         }
-    }
-}
-
-task writeNewPom {
-    doLast {
-        pom {
-            artifactId = "commons-elm"
-            project {
-                inceptionYear '2017'
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
-                    }
-                }
-            }
-        }.writeTo("$buildDir/pom.xml")
     }
 }
