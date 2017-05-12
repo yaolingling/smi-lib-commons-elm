@@ -6,6 +6,7 @@
  */
 package com.dell.isg.smi.commons.elm.messaging;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -18,8 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.util.StringUtils;
 
-import static com.dell.isg.smi.commons.elm.CommonConstants.DEFAULT_CLIENT_LOCALE;
-
 import com.dell.isg.smi.commons.elm.bundle.ResourceBundleReader;
 import com.dell.isg.smi.commons.elm.messaging.IMessageReader;
 
@@ -27,6 +26,8 @@ import com.dell.isg.smi.commons.elm.messaging.IMessageReader;
  * The Class FriendlyMessageBundleReader.
  */
 public class FriendlyMessageBundleReader implements IMessageReader {
+    
+    String DEFAULT_CLIENT_LOCALE = "en_US";
     
     @SuppressWarnings("all")
     private class OrderedProperties extends Properties {
