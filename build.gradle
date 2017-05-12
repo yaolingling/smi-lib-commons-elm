@@ -109,7 +109,7 @@ uploadArchives {
 	        pom.project {
 				artifactId = "commons-elm"
 				packaging 'jar'
-				url 'https://www.github.com/rackhd/smi-lib-commons'
+				url 'https://www.github.com/rackhd/smi-lib-commons-elm'
 				name 'SMI Commons ELM'
 				description 'Commons Exception and Localized Messaging (ELM) jar library for the System Management Integration (SMI) projects.'
 				inceptionYear '2017'
