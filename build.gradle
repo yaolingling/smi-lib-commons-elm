@@ -81,7 +81,7 @@ dependencies {
 	compile "org.springframework:spring-web:${springVersion}"
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
 	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-	compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
+	compile group: 'org.apache.openjpa', name: 'openjpa-persistence', version: '2.4.2'
 }
 
 test {
