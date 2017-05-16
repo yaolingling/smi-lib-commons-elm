@@ -18,7 +18,7 @@ import com.dell.isg.smi.commons.elm.messaging.IMessageEnum;
  */
 public class BaseException {
 
-    private List<String> attributes = new LinkedList<String>();
+    private List<String> attributes = new LinkedList<>();
 
     int errorID = 0;
     ExceptionSeverityEnum severity = ExceptionSeverityEnum.CRITICAL;

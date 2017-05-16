@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/RackHD/smi-lib-commons-elm.svg?branch=master)](https://travis-ci.org/RackHD/smi-lib-commons-elm) [![Quality Gate](https://sonarqube.com/api/badges/gate?key=com.dell.isg.smi:commons-elm)](https://sonarqube.com/dashboard?id=com.dell.isg.smi%3Acommons-elm)
+
 ### smi-lib-commons-elm
 
 ### Overview

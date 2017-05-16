@@ -18,26 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * <p>
- * Java class for LocalizedMessage complex type.
- *
- * <p>
- * The following schema fragment specifies the expected content contained within this class.
- *
- * <pre>
- * &lt;complexType name="LocalizedMessage">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="MessageEntityList" type="{http://esg.dell.com/icee/common/model}MessageEntity" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="MessageGroup" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- *
- *
+ * The Class LocalizedMessage.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LocalizedMessage", propOrder = { "messageEntityList", "messageGroup" })
@@ -51,23 +32,23 @@ public class LocalizedMessage {
 
     /**
      * Gets the value of the messageEntityList property.
-     *
+     * 
      * <p>
      * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the messageEntityList property.
-     *
+     * 
      * <p>
      * For example, to add a new item, do as follows:
      * 
      * <pre>
      * getMessageEntityList().add(newItem);
      * </pre>
-     *
-     *
+     * 
+     * 
      * <p>
      * Objects of the following type(s) are allowed in the list {@link MessageEntity }
      *
-     *
+     * @return the message entity list
      */
     public List<MessageEntity> getMessageEntityList() {
         if (messageEntityList == null) {

@@ -12,7 +12,7 @@ import java.util.Date;
 import com.dell.isg.smi.commons.elm.model.MessagePartEnum;
 
 /**
- *
+ * The Class MessageEntity.
  */
 public class MessageEntity implements Serializable {
 
@@ -34,6 +34,8 @@ public class MessageEntity implements Serializable {
 
 
     /**
+     * Gets the id.
+     *
      * @return the id
      */
     public Long getId() {
@@ -42,6 +44,8 @@ public class MessageEntity implements Serializable {
 
 
     /**
+     * Sets the id.
+     *
      * @param id the id to set
      */
     public void setId(Long id) {
@@ -50,6 +54,8 @@ public class MessageEntity implements Serializable {
 
 
     /**
+     * Gets the message enum.
+     *
      * @return the messageCode
      */
     public IMessageEnum getMessageEnum() {
@@ -58,7 +64,9 @@ public class MessageEntity implements Serializable {
 
 
     /**
-     * @param messageCode the messageCode to set
+     * Sets the message enum.
+     *
+     * @param messageEnum the new message enum
      */
     public void setMessageEnum(IMessageEnum messageEnum) {
         this.messageEnum = messageEnum;
@@ -66,6 +74,8 @@ public class MessageEntity implements Serializable {
 
 
     /**
+     * Gets the message part enum.
+     *
      * @return messagePart
      */
     public MessagePartEnum getMessagePartEnum() {
@@ -74,7 +84,9 @@ public class MessageEntity implements Serializable {
 
 
     /**
-     * @param messagePartEnum
+     * Sets the message part enum.
+     *
+     * @param messagePartEnum the new message part enum
      */
     public void setMessagePartEnum(MessagePartEnum messagePartEnum) {
         this.messagePartEnum = messagePartEnum;
@@ -82,6 +94,8 @@ public class MessageEntity implements Serializable {
 
 
     /**
+     * Gets the message params.
+     *
      * @return the messageParams
      */
     public String getMessageParams() {
@@ -90,6 +104,8 @@ public class MessageEntity implements Serializable {
 
 
     /**
+     * Sets the message params.
+     *
      * @param messageParams the messageParams to set
      */
     public void setMessageParams(String messageParams) {
@@ -98,6 +114,8 @@ public class MessageEntity implements Serializable {
 
 
     /**
+     * Gets the creation time.
+     *
      * @return the creationTime
      */
     public Date getCreationTime() {
@@ -106,6 +124,8 @@ public class MessageEntity implements Serializable {
 
 
     /**
+     * Sets the creation time.
+     *
      * @param creationTime the creationTime to set
      */
     public void setCreationTime(Date creationTime) {
@@ -114,6 +134,8 @@ public class MessageEntity implements Serializable {
 
 
     /**
+     * Gets the group order.
+     *
      * @return the groupOrder
      */
     public int getGroupOrder() {
@@ -122,6 +144,8 @@ public class MessageEntity implements Serializable {
 
 
     /**
+     * Sets the group order.
+     *
      * @param groupOrder the groupOrder to set
      */
     public void setGroupOrder(int groupOrder) {
@@ -130,6 +154,8 @@ public class MessageEntity implements Serializable {
 
 
     /**
+     * Gets the message group.
+     *
      * @return the messageGroup
      */
     public String getMessageGroup() {
@@ -138,6 +164,8 @@ public class MessageEntity implements Serializable {
 
 
     /**
+     * Sets the message group.
+     *
      * @param messageGroup the messageGroup to set
      */
     public void setMessageGroup(String messageGroup) {

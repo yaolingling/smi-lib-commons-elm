@@ -11,14 +11,11 @@ import com.dell.isg.smi.commons.elm.model.EnumErrorCode;
  */
 public class CommunicationException extends RuntimeCoreException {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -7713024188690225574L;
 
 
     /**
-     * 
+     * Instantiates a new communication exception.
      */
     public CommunicationException() {
         super();
@@ -27,7 +24,9 @@ public class CommunicationException extends RuntimeCoreException {
 
 
     /**
-     * @param code
+     * Instantiates a new communication exception.
+     *
+     * @param code the code
      */
     public CommunicationException(long code) {
         super(code);
@@ -36,7 +35,9 @@ public class CommunicationException extends RuntimeCoreException {
 
 
     /**
-     * @param e
+     * Instantiates a new communication exception.
+     *
+     * @param e the e
      */
     public CommunicationException(Throwable e) {
         super(e);
@@ -45,7 +46,9 @@ public class CommunicationException extends RuntimeCoreException {
 
 
     /**
-     * @param msg
+     * Instantiates a new communication exception.
+     *
+     * @param msg the msg
      */
     public CommunicationException(String msg) {
         super(msg);
@@ -54,8 +57,10 @@ public class CommunicationException extends RuntimeCoreException {
 
 
     /**
-     * @param msg
-     * @param e
+     * Instantiates a new communication exception.
+     *
+     * @param msg the msg
+     * @param e the e
      */
     public CommunicationException(String msg, Throwable e) {
         super(msg, e);
@@ -64,7 +69,9 @@ public class CommunicationException extends RuntimeCoreException {
 
 
     /**
-     * @param errorCode
+     * Instantiates a new communication exception.
+     *
+     * @param errorCode the error code
      */
     public CommunicationException(EnumErrorCode errorCode) {
         super(errorCode);

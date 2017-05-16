@@ -6,6 +6,7 @@
  */
 package com.dell.isg.smi.commons.elm.messaging;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -18,18 +19,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.util.StringUtils;
 
-import static com.dell.isg.smi.commons.elm.CommonConstants.DEFAULT_CLIENT_LOCALE;
-
 import com.dell.isg.smi.commons.elm.bundle.ResourceBundleReader;
 import com.dell.isg.smi.commons.elm.messaging.IMessageReader;
 
 /**
- *
+ * The Class FriendlyMessageBundleReader.
  */
-
 public class FriendlyMessageBundleReader implements IMessageReader {
-    private Object _tag = null;
-
+    
+    String DEFAULT_CLIENT_LOCALE = "en_US";
+    
     @SuppressWarnings("all")
     private class OrderedProperties extends Properties {
 
@@ -73,11 +72,19 @@ public class FriendlyMessageBundleReader implements IMessageReader {
     private Locale locale;
 
 
+    /**
+     * Instantiates a new friendly message bundle reader.
+     */
     public FriendlyMessageBundleReader() {
         this.locale = LocaleContextHolder.getLocale();
     }
 
 
+    /**
+     * Instantiates a new friendly message bundle reader.
+     *
+     * @param locale2 the locale 2
+     */
     public FriendlyMessageBundleReader(Locale locale2) {
         this.locale = locale2;
     }
@@ -90,7 +97,7 @@ public class FriendlyMessageBundleReader implements IMessageReader {
             stream = this.getClass().getClassLoader().getResourceAsStream("AvailableBundle.properties");
             bundles.load(stream);
         } catch (Exception e) {
-            log.error("Error in loadBundleNames()");
+            log.error("Error in loadBundleNames()", e);
         } finally {
             if (stream != null) {
                 stream.close();
@@ -100,8 +107,8 @@ public class FriendlyMessageBundleReader implements IMessageReader {
     }
 
 
-    /**
-     *
+    /* (non-Javadoc)
+     * @see com.dell.isg.smi.commons.elm.messaging.IMessageReader#getMessage(java.lang.String)
      */
     @Override
     public String getMessage(String msgCode) {
@@ -116,7 +123,7 @@ public class FriendlyMessageBundleReader implements IMessageReader {
                     String value = bundles.getProperty(key);
                     try {
                         ResourceBundleReader reader = new ResourceBundleReader(this.locale, value);
-                        if (reader != null && reader.getString(msgCode) != null) {
+                        if (reader.getString(msgCode) != null) {
                             return reader.getString(msgCode);
                         }
                     } catch (Exception e) {
@@ -132,7 +139,7 @@ public class FriendlyMessageBundleReader implements IMessageReader {
                 }
             }
         } catch (Exception e) {
-            log.debug("Could not find available resource bundle names for Locale: " + this.locale.getDisplayName() + " and message code: " + msgCode);
+            log.debug("Could not find available resource bundle names for Locale: " + this.locale.getDisplayName() + " and message code: " + msgCode, e);
         }
 
         // If cannot translate msgCode then just return msgCode.
@@ -140,8 +147,8 @@ public class FriendlyMessageBundleReader implements IMessageReader {
     }
 
 
-    /**
-     *
+    /* (non-Javadoc)
+     * @see com.dell.isg.smi.commons.elm.messaging.IMessageReader#getMessage(java.lang.String, java.lang.Object[])
      */
     @Override
     public String getMessage(String msgCode, Object[] attributes) {
@@ -156,7 +163,7 @@ public class FriendlyMessageBundleReader implements IMessageReader {
                     String value = bundles.getProperty(key);
                     try {
                         ResourceBundleReader reader = new ResourceBundleReader(locale, value);
-                        if (reader != null && reader.getString(msgCode, attributes) != null) {
+                        if (reader.getString(msgCode, attributes) != null) {
                             return reader.getString(msgCode, attributes);
                         }
                     } catch (Exception e) {
@@ -172,7 +179,7 @@ public class FriendlyMessageBundleReader implements IMessageReader {
                 }
             }
         } catch (Exception e) {
-            log.debug("Could not find available resource bundle names for Locale: " + this.locale.getDisplayName() + " and message code: " + msgCode);
+            log.debug("Could not find available resource bundle names for Locale: " + this.locale.getDisplayName() + " and message code: " + msgCode, e);
         }
 
         // If cannot translate msgCode then just return msgCode
@@ -181,7 +188,11 @@ public class FriendlyMessageBundleReader implements IMessageReader {
 
 
     /**
+     * Gets the message.
      *
+     * @param msgCode the msg code
+     * @param bundleName the bundle name
+     * @return the message
      */
     public String getMessage(String msgCode, String bundleName) {
         try {
@@ -197,7 +208,7 @@ public class FriendlyMessageBundleReader implements IMessageReader {
                         String value = bundles.getProperty(key);
                         try {
                             ResourceBundleReader reader = new ResourceBundleReader(locale, value);
-                            if (reader != null && reader.getString(msgCode) != null) {
+                            if (reader.getString(msgCode) != null) {
                                 return reader.getString(msgCode);
                             }
                         } catch (Exception e) {
@@ -224,7 +235,12 @@ public class FriendlyMessageBundleReader implements IMessageReader {
 
 
     /**
+     * Gets the message.
      *
+     * @param msgCode the msg code
+     * @param attributes the attributes
+     * @param bundleName the bundle name
+     * @return the message
      */
     public String getMessage(String msgCode, Object[] attributes, String bundleName) {
         try {
@@ -240,7 +256,7 @@ public class FriendlyMessageBundleReader implements IMessageReader {
                         String value = bundles.getProperty(key);
                         try {
                             ResourceBundleReader reader = new ResourceBundleReader(locale, value);
-                            if (reader != null && reader.getString(msgCode, attributes) != null) {
+                            if (reader.getString(msgCode, attributes) != null) {
                                 return reader.getString(msgCode, attributes);
                             }
                         } catch (Exception e) {
@@ -258,7 +274,7 @@ public class FriendlyMessageBundleReader implements IMessageReader {
                 }
             }
         } catch (Exception e) {
-            log.debug("Could not find available resource bundle names for Locale: " + this.locale.getDisplayName() + " and message code: " + msgCode);
+            log.debug("Could not find available resource bundle names for Locale: " + this.locale.getDisplayName() + " and message code: " + msgCode, e);
         }
 
         // If cannot translate msgCode then just return msgCode.
@@ -266,8 +282,11 @@ public class FriendlyMessageBundleReader implements IMessageReader {
     }
 
 
+    /* (non-Javadoc)
+     * @see com.dell.isg.smi.commons.elm.messaging.IMessageReader#setTag(java.lang.Object)
+     */
     @Override
     public void setTag(Object tag) {
-        _tag = tag;
+        //_tag = tag;
     }
 }
