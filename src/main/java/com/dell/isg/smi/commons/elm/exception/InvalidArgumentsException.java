@@ -9,6 +9,7 @@ package com.dell.isg.smi.commons.elm.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.dell.isg.smi.commons.elm.messaging.IMessageEnum;
 import com.dell.isg.smi.commons.elm.model.EnumErrorCode;
 
 /**
@@ -22,19 +23,45 @@ public class InvalidArgumentsException extends RuntimeCoreException {
 
     // Default Constructor
     public InvalidArgumentsException() {
-        // Implement it
+    	super();
+        this.setErrorCode(EnumErrorCode.ENUM_INVALID_DATA);
     }
 
+    public InvalidArgumentsException(Throwable e) {
+    	super(e);
+        this.setErrorCode(EnumErrorCode.ENUM_INVALID_DATA);
+    }
 
-    public InvalidArgumentsException(String attributeName, Throwable e) {
+    public InvalidArgumentsException(IMessageEnum errorCode) {
+    	super();
+    	this.setErrorCode(errorCode);
+    }
+    
+    public InvalidArgumentsException(IMessageEnum errorCode, Throwable e) {
         super(e);
+    	this.setErrorCode(errorCode);
+    }
+
+    public InvalidArgumentsException(IMessageEnum errorCode, String attributeName) {
+    	super();
+    	this.setErrorCode(errorCode);
+        this.addAttribute(attributeName);
+    }
+
+    public InvalidArgumentsException(IMessageEnum errorCode, String attributeName, Throwable e) {
+    	super(e);
+    	this.setErrorCode(errorCode);
+    	this.addAttribute(attributeName);
+    }
+
+    public InvalidArgumentsException(String attributeName) {
+        super();
         this.setErrorCode(EnumErrorCode.ENUM_INVALID_DATA);
         this.addAttribute(attributeName);
     }
 
-
-    public InvalidArgumentsException(String attributeName) {
-        super();
+    public InvalidArgumentsException(String attributeName, Throwable e) {
+        super(e);
         this.setErrorCode(EnumErrorCode.ENUM_INVALID_DATA);
         this.addAttribute(attributeName);
     }
