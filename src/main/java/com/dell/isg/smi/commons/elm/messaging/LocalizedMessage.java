@@ -228,6 +228,9 @@ public class LocalizedMessage implements Serializable {
         if (messages != null) {
             for (int i = 0; i < messages.length; i++) {
                 IMessageEnum messageEnum = messages[i].getMessageEnum();
+                if (messageEnum == null) {
+                	return localizedMessage;
+                }
                 String code = messageEnum.getId() + messages[i].getMessagePartEnum().name();
                 IMessageReader reader = MessageReaderFactory.createReader(code.trim(), locale);
                 localizedMessage += this.getMessage(reader, locale, code.trim(), messages[i].getMessageParams()) + " ";
