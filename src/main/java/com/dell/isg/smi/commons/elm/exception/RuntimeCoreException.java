@@ -13,7 +13,6 @@ import com.dell.isg.smi.commons.elm.messaging.IMessageEnum;
 import com.dell.isg.smi.commons.elm.messaging.LocalizedMessage;
 import com.dell.isg.smi.commons.elm.model.MessagePartEnum;
 
-// TODO: Auto-generated Javadoc
 /**
  *
  * This Runtime Exception Base class is an adapter around the BaseException This class can be subclasses by Core Runtime exception subtypes. Notice it inherits from
@@ -21,13 +20,16 @@ import com.dell.isg.smi.commons.elm.model.MessagePartEnum;
  *
  */
 public class RuntimeCoreException extends RuntimeException implements CoreException {
+    
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
+    /** The base exception. */
     protected final BaseException baseException = new BaseException();
 
 
     /**
-     * default constructor
+     * default constructor.
      */
     public RuntimeCoreException() {
         // allows creating an empty exception
@@ -133,6 +135,9 @@ public class RuntimeCoreException extends RuntimeException implements CoreExcept
     }
 
 
+    /* (non-Javadoc)
+     * @see com.dell.isg.smi.commons.elm.bundle.Attributes#addAttribute(java.lang.String)
+     */
     @Override
     public Attributes addAttribute(String value) {
         baseException.addAttribute(value);
@@ -156,19 +161,17 @@ public class RuntimeCoreException extends RuntimeException implements CoreExcept
      */
     @Override
     public String getMessage() {
+    	if (this.baseException == null || this.baseException.errorCode == null) {
+    		// There's no errorCocde to look up a localized message, so return the English string if one is provided
+    		if (this.getCause() != null && this.getCause().getMessage() != null) {
+    			return this.getCause().getMessage();
+    		} else {
+    			return "";
+    		}
+    	}
         LocalizedMessage localizedMessage = generateLocalizedMessage();
         return localizedMessage.toString();
     }
-
-    // @Override
-    // public String getMessage() {
-    // if (super.getMessage() == null) {
-    // return "";
-    // } else {
-    // return super.getMessage();
-    // }
-    // }
-
 
     /**
      * Generate exception message code.
