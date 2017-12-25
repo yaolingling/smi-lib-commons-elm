@@ -68,8 +68,10 @@ task javadocJar(type: Jar) {
 repositories {
 	mavenLocal()
 	maven {
-	    url "${artifactory_contextUrl}/${dependency_repo}"
-	}
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+        url "https://oss.sonatype.org/content/repositories/releases"
+        url "https://repo.maven.apache.org/maven2"
+    }
 }
 
 ext {
